@@ -1,0 +1,32 @@
+<div *ngIf="events">
+    <h1>Event List</h1>
+
+    <div style="padding-bottom: 15px;">
+        <a [routerLink]="'/events/0'">New Event</a>
+    </div>
+
+    <table class="event-table">
+      <thead>
+        <tr>
+           <th>Id</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Category</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+            <td>{{ event.id }}</td>
+            <td>{{ event.name }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.time }}</td>
+            <td>{{ event.type }}</td>
+            <td>
+            <a [routerLink]="'/events/' + event.id">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>      
+</div>

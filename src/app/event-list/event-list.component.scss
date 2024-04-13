@@ -1,0 +1,19 @@
+/* styles.css (or any other stylesheet you're using) */
+.event-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .event-table th, .event-table td {
+    padding: 8px;
+    border: 1px solid #ddd; /* Add borders to cells */
+  }
+  
+  .event-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .event-table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
