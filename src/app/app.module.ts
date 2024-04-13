@@ -11,6 +11,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { EventEditComponent } from './event-edit/event-edit.component';
 import { HomeComponent } from './home/home.component';
 import { EventListComponent } from './event-list/event-list.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import { EventListComponent } from './event-list/event-list.component';
     FormsModule, 
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
