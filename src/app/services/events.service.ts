@@ -23,4 +23,16 @@ export class EventsService {
   updateEvent(id: number, data: Event): Observable<Event> {
     return this.http.put<Event>(`${this.baseUrl}/${id}`, data);
   }
+
+  deleteEvent(id: number): Observable<Event> {
+    return this.http.delete<Event>(`${this.baseUrl}/${id}`);
+  }  
+
+  getYaml(id: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/yaml/${id}`, { responseType: 'text' });
+  }
+
+  download(id: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/generate/${id}`, { responseType: 'text' });
+  }
 }

@@ -1,0 +1,11 @@
+.text-content {
+    flex-grow: 1; /* Allow the title to grow to occupy available space */
+    overflow-wrap: break-word; /* word wrap for long lines */
+  
+    overflow-y: auto; /* enable vertical scrolling */
+    overflow-x: auto; /* hide horizontal scrollbar */
+  
+    width: 100%;
+
+    padding: 15px;
+  }

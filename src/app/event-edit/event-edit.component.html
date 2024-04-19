@@ -1,38 +1,157 @@
 <!-- event.component.html -->
 <div *ngIf="event">
-  <h2>Edit Event</h2>
-  <form (ngSubmit)="saveEvent()">
+  <form #eventForm="ngForm">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Even Information
+        </mat-card-title>
+      </mat-card-header>
 
-    <label for="id">Id:</label> 
-    <input type="text" id="id" name="id" [(ngModel)]="event.id" required><br>        
+      <mat-card-content>
+        <mat-form-field>
+          <input matInput placeholder="Event Name" name="eventName" [(ngModel)]="event.name" required>
+        </mat-form-field>
 
-    <label for="sName">Event Name:</label> 
-    <input type="text" id="sName" name="sName" [(ngModel)]="event.name" required><br>
-    
-    <label for="cName">Category:</label>
-    <input type="text" id="cName" name="cName" [(ngModel)]="event.type" required><br>
+        <mat-form-field>           
+          <input matInput placeholder="Date YYYY/MM/DD" name="date" [(ngModel)]="event.date" required>
+        </mat-form-field>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Song Name</th>
-          <th>Category</th>
-          <th>Pdf</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let song of event.songs">
-          <td>{{ song.sName }}</td>
-          <td>{{ song.cName }}</td>
-          <td>{{ song.pdf.link }}</td>
-        </tr>
-      </tbody>
-    </table>
+        <mat-form-field>           
+          <input matInput placeholder="Time hh:mm" name="time" [(ngModel)]="event.time" required>
+        </mat-form-field>        
 
-    <button type="submit">Save</button>
+        <mat-form-field>
+          <mat-select matInput placeholder="Event Type" name="type" [(ngModel)]="event.type" required>
+            <mat-option *ngFor="let item of eventTypes; index as i;" [value]="item">
+              {{ item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header style="display: flex;">
+        <mat-card-title>
+          Songs - ({{event.songs.length}} items)
+        </mat-card-title>
+
+        <div style="flex-grow: 1;"></div>
+
+        <button mat-button (click)="addNewSong()" [disabled]="!eventForm.form.valid">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-header>
+
+      <div>
+        <mat-expansion-panel *ngFor="let song of event.songs; index as i;" [expanded]="songIndex === i"
+          (opened)="setSongIndex(i)" (closed)="closeSong(i)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{i + 1}}. {{song.cName}} - {{song.sName}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <input type="text" placeholder="Song Type" name="songType{{i}}" [(ngModel)]="song.cName" matInput
+              [matAutocomplete]="autoSongType" required>
+            <mat-autocomplete #autoSongType="matAutocomplete">
+              <mat-option *ngFor="let item of songTypes; index as n;" [value]="item">
+                {{ item }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input #songName matInput placeholder="Name" name="songName{{i}}" [(ngModel)]="song.sName"
+              required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="PDF Link" name="songPdfLink{{i}}" [(ngModel)]="song.pdf.link" required>
+            <button matSuffix mat-stroked-button color="primary" (click)="uploader.click()">Upload</button>
+            <input hidden type="file" #uploader (change)="fileChange(event.id, song, $event)" />
+          </mat-form-field>
+
+          <mat-card>
+            <mat-card-header style="display: flex;">
+              <mat-card-title>
+                Media - ({{song.medias.length}} items)
+              </mat-card-title>
+              <div style="flex-grow: 1;"></div>
+              <button mat-button (click)="addNewMedia(song)" [disabled]="!eventForm.form.valid">
+                <mat-icon>add</mat-icon>
+              </button>
+            </mat-card-header>
+            <div>
+              <mat-expansion-panel *ngFor="let media of song.medias; index as j;" [expanded]="mediaIndex === j"
+                (opened)="setMediaIndex(j)" (closed)="closeMedia(i)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{j + 1}}. {{media.name}} - {{media.part}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-form-field>
+                  <input matInput placeholder="Name" name="mediaName{{i}}_{{j}}" [(ngModel)]="media.name" required>
+                </mat-form-field>
+                <mat-form-field>
+                  <input matInput placeholder="Link" name="mediaLink{{i}}_{{j}}" [(ngModel)]="media.link" required>
+                  <button matSuffix mat-stroked-button color="primary" (click)="mediaUploader.click()">Upload</button>
+                  <input hidden type="file" #mediaUploader (change)="mediaFileChange(event.id, media, $event)" />
+                </mat-form-field>
+                <mat-form-field>
+                  <input type="text" placeholder="Type" name="mediaType{{i}}_{{j}}" [(ngModel)]="media.type" matInput
+                    [matAutocomplete]="auto" required>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of mediaTypes" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input type="text" placeholder="Part" name="mediaPart{{i}}_{{j}}" [(ngModel)]="media.part" matInput
+                    [matAutocomplete]="autoPart" required>
+                  <mat-autocomplete #autoPart="matAutocomplete">
+                    <mat-option *ngFor="let option of mediaParts" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-action-row style="display: flex;">
+                  <button mat-stroked-button color="warn" (click)="removeMedia(song, j)">Remove</button>
+                  <div style="flex-grow: 1;"></div>
+                  <button mat-stroked-button color="primary" (click)="prevMedia()">Previous</button>
+                  <button mat-stroked-button color="primary" (click)="nextMedia()"
+                    *ngIf="j < song.medias.length - 1">Next</button>
+                  <button mat-stroked-button color="accent" (click)="addNewMedia(song)"
+                    *ngIf="j === song.medias.length - 1" [disabled]="!eventForm.form.valid">Add Media</button>
+                </mat-action-row>
+              </mat-expansion-panel>
+            </div>
+          </mat-card>
+
+          <mat-action-row style="display: flex;">
+            <button mat-stroked-button color="warn" (click)="removeSong(i)">Remove</button>
+            <div style="flex-grow: 1;"></div>
+            <button mat-stroked-button color="primary" (click)="prevSong()">Previous</button>
+            <button mat-stroked-button color="primary" (click)="nextSong()"
+              *ngIf="i < event.songs.length - 1">Next</button>
+            <button mat-stroked-button color="accent" (click)="addNewSong(true)" *ngIf="i === event.songs.length - 1"
+              [disabled]="!eventForm.form.valid">Add Song</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </div>
+    </mat-card>
+
+    <mat-card style="display: flex; flex-direction: row-reverse; gap: 20px 20px; box-shadow: none;">
+      <button mat-raised-button color="accent" (click)="onSubmit()" [disabled]="!eventForm.form.valid">Save</button>
+      <button mat-raised-button (click)="cancel()">Cancel</button>
+
+       <span class="message">{{message}}</span>
+    </mat-card>
   </form>
 </div>
-
-<h2>Upload Files</h2>
-<input type="file" (change)="onFilesSelected($event)">
-<button (click)="onUpload()">Upload</button>

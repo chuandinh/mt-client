@@ -1,4 +1,4 @@
-<div *ngIf="events">
+<div class="event-list" *ngIf="events">
     <h1>Event List</h1>
 
     <div style="padding-bottom: 15px;">
@@ -25,6 +25,12 @@
             <td>{{ event.type }}</td>
             <td>
             <a [routerLink]="'/events/' + event.id">Edit</a>
+            &nbsp;
+            <a style="text-decoration: underline;" (click)="deleteEvent(event.id)">Delete</a>
+            &nbsp;
+            <a [routerLink]="'/yaml/' + event.id">Yaml</a>    
+            &nbsp;
+            <a style="text-decoration: underline;" (click)="download(event.id)">Download Zip</a>                    
             </td>
         </tr>
         </tbody>

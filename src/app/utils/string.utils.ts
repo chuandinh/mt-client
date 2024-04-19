@@ -26,5 +26,16 @@ export class StringUtils {
       
         return `${year}${month}${day}${hours}${minutes}`;
     }   
+
+    static formatNumberWithDigits(number: number, numDigits: number): string {
+      const formattedNumber: string = number.toString().padStart(numDigits, '0');
+      return formattedNumber;
+    }
+
+    static combineNumbers(num1: number | string, num2: number | string): number {
+      const combinedString: string = num1.toString() + num2.toString();
+      const combinedNumber: number = parseInt(combinedString);
+      return combinedNumber;
+    }  
   }
   
